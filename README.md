@@ -1,6 +1,6 @@
 # 🌿 Premium Sortify — Smart Campus Waste Sorting System with EcoGuide AI
 
-Premium Sortify is an AI-powered smart waste management system. It combines a computer-vision-driven smart bin, a gamified student mobile app, and **EcoGuide AI** — a bilingual (Arabic/English) conversational assistant — to classify waste in real time and spread sustainability awareness.
+Premium Sortify is an AI-powered smart waste management system built for **Cairo University's Faculty of Engineering**. It combines a computer-vision-driven smart bin, a gamified student mobile app, and **EcoGuide AI** — a bilingual (Arabic/English) conversational assistant — to classify waste in real time and spread sustainability awareness on campus.
 
 ---
 
@@ -15,6 +15,7 @@ This repo contains the **AI/ML core** of the project — the pieces that turn a 
 | **RAG Pipeline** | Dual FAISS retrieval (project-specific + general sustainability knowledge) fused with Reciprocal Rank Fusion |
 | **EcoGuide AI Chatbot** | Qwen2.5-7B-Instruct generation layer with strict bilingual response enforcement, served locally via Gradio |
 | **Waste Vision Classifier** | ResNet50 model (benchmarked against 3 other architectures) sorting items into Glass / Metal / Organic / Plastic in real time on the physical bin |
+| **Explainable AI (Grad-CAM)** | Visual heatmaps validating the classifier attends to the actual waste item, not background artifacts, before deployment |
 
 ---
 
@@ -140,7 +141,13 @@ Four architectures were fine-tuned and compared head-to-head on identical data, 
 - **Transfer learning:** ImageNet-pretrained ResNet50, backbone frozen except `layer3`/`layer4`, with a custom classification head (Dropout → FC(512) → ReLU → FC(4))
 - **Augmentation:** RandomResizedCrop, RandomHorizontalFlip, TrivialAugmentWide
 - **Optimization:** AdamW, cosine-annealed learning rate, bf16 automatic mixed precision, `channels_last` memory format for GPU throughput
-- **Explainability:** Grad-CAM visualizations generated per-class to verify the model is attending to the actual object rather than background/lighting artifacts — used as a sanity check before deployment, not just accuracy metrics
+
+### Explainable AI (XAI) — Grad-CAM
+Accuracy alone doesn't prove a model is looking at the right thing — it could be keying off background, lighting, or a hand in the frame instead of the waste item itself. To validate this before trusting the model with a physical, automated sorting decision, **Grad-CAM** was used to generate visual heatmaps showing exactly which pixels drove each prediction, sampled across all 4 classes:
+
+![Grad-CAM results across Glass, Metal, Organic, and Plastic classes](./gradcam_results.png)
+
+In every sampled case, the heatmap concentrates on the object itself (the bottle body, the can, the food waste, the plastic bottle) rather than the hand, background, or table — evidence that the model learned genuine material/shape features instead of shortcut correlations in the dataset. This was used as a pre-deployment sanity check, not just a nice visualization: a model with high accuracy but a heatmap fixated on irrelevant background would be a red flag worth catching before it goes into a physical bin making real sorting decisions.
 
 ### Model Evolution
 The project's first working prototype used transfer learning on **VGG16**, reaching **86% accuracy**. That baseline was later replaced after benchmarking four modern architectures head-to-head (see table above) — **ResNet50 was selected**, lifting accuracy to **95.9%** while keeping inference fast enough for real-time use on the physical bin.
@@ -181,4 +188,4 @@ Cairo University, Faculty of Engineering — interdisciplinary team of 5:
 ---
 
 ## 📌 Notes
-This README documents the AI/ML components of Premium Sortify. The chatbot logic, guardrail system, and adversarial testing suite were developed and iterated on locally, with a focus on reliable bilingual behavior and graceful failure (clarification over hallucination) rather than raw benchmark accuracy alone.
+This README documents the AI/ML components of Premium Sortify, built for a university sustainability competition. The chatbot logic, guardrail system, and adversarial testing suite were developed and iterated on locally, with a focus on reliable bilingual behavior and graceful failure (clarification over hallucination) rather than raw benchmark accuracy alone.
