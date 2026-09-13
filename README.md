@@ -1,6 +1,6 @@
 # 🌿 Premium Sortify — Smart Campus Waste Sorting System with EcoGuide AI
 
-Premium Sortify is an AI-powered smart waste management system built for **Cairo University's Faculty of Engineering**. It combines a computer-vision-driven smart bin, a gamified student mobile app, and **EcoGuide AI** — a bilingual (Arabic/English) conversational assistant — to classify waste in real time and spread sustainability awareness on campus.
+Premium Sortify is an AI-powered smart waste management system. It combines a computer-vision-driven smart bin, a gamified student mobile app, and **EcoGuide AI** — a bilingual (Arabic/English) conversational assistant — to classify waste in real time and spread sustainability awareness on campus.
 
 ---
 
@@ -161,13 +161,6 @@ The project's first working prototype used transfer learning on **VGG16**, reach
 
 ---
 
-## 📱 Mobile App
-- Gamified points system, achievement badges, and a campus leaderboard
-- QR-code vouchers and RFID/student ID integration
-- Real-time sync with EcoGuide AI for in-app assistance
-
----
-
 ## 🛠️ Tech Stack
 
 **ML / NLP:** PyTorch, HuggingFace Transformers, XLM-RoBERTa, Qwen2.5-7B-Instruct, Sentence-Transformers, FAISS
@@ -179,13 +172,5 @@ The project's first working prototype used transfer learning on **VGG16**, reach
 
 ---
 
-## 👥 Team
-Cairo University, Faculty of Engineering — interdisciplinary team of 5:
-- **Hardware Development:** smart bin design, sensor integration, Arduino firmware, servo-driven sorting mechanism
-- **AI Development Lead:** waste classification model (ResNet50) and EcoGuide AI (intent classifier, guardrails, RAG)
-- **Mobile Application Development:** student-facing app, points tracking, badges, QR vouchers
-
----
-
 ## 📌 Notes
-This README documents the AI/ML components of Premium Sortify, built for a university sustainability competition. The chatbot logic, guardrail system, and adversarial testing suite were developed and iterated on locally, with a focus on reliable bilingual behavior and graceful failure (clarification over hallucination) rather than raw benchmark accuracy alone.
+This README documents the AI/ML components of Premium Sortify. The chatbot logic, guardrail system, and adversarial testing suite were developed and iterated on locally, with a focus on reliable bilingual behavior and graceful failure (clarification over hallucination) rather than raw benchmark accuracy alone.
